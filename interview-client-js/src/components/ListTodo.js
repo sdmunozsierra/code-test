@@ -1,48 +1,78 @@
-import React, { Component } from "react";
-import axios from 'axios';
+import axios from 'axios'
+import React, { useEffect, useState } from 'react'
+import EditTodo from './EditTodo'
 
-export default class ListTodo extends Component {
-  state = {
-    error: null,
-    isLoaded: false,
-    items: []
-  };
+const ListTodo = () => {
+  const [todos, setTodos] = useState([])
 
-  componentDidMount() {
-	axios.get('http://localhost:6000/todo', 
-	{ headers: { 'Accept': '*', 'Content-Type': 'application/json', 'Accept-Control-Allow-Remote': '*' }
-	}).then(result => {
-        this.setState({
-          isLoaded: true,
-          items: result.data
-        });
-      },
-      error => {
-        this.setState({
-          isLoaded: true,
-          error
-        });
-	      console.error(error)
-      }
-      );
+  //
+  // const deleteTodo = async (id) => {
+  //   try {
+  //     const deleteTodo = await fetch(`http://localhost:5000/todos/${id}`, {
+  //       method: 'DELETE',
+  //     });
+  //     console.log(deleteTodo);
+  //     setTodos(todos.filter((todo) => todo.todo_id !== id));
+  //   } catch (err) {
+  //     console.error(err.message);
+  //   }
+  // };
+  //
+  const getTodos = async () => {
+    axios
+      .get('http://localhost:6000/todo', {
+        headers: {
+          Accept: '*',
+          'Content-Type': 'application/json',
+          'Accept-Control-Allow-Remote': '*',
+        },
+      })
+      .then(
+        (result) => {
+          setTodos(result.data)
+        },
+        (error) => {
+          console.error(error)
+        }
+      )
   }
 
-  render() {
-    const { error, isLoaded, items } = this.state;
-    if (error) {
-      return <div>Error: {error.message}</div>;
-    } else if (!isLoaded) {
-      return <div>Loading...</div>;
-    } else {
-      return (
-        <ul>
-          {items.map(item => (
-            <li key={item.id}>
-              {item.id}: {item.content}
-            </li>
+  useEffect(() => {
+    getTodos()
+  }, [])
+
+  //
+  return (
+    <>
+      <table className="table mt-5 text-center">
+        <thead>
+          <tr>
+            <th>Description</th>
+            <th>Edit</th>
+            <th>Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+          {todos.map((todo) => (
+            <tr key={todo.id}>
+              <td>{todo.content}</td>
+              <td>
+                <EditTodo todo={todo} />
+              </td>
+              <td>
+                {/* <button
+                  className="btn btn-danger"
+                  onClick={() => deleteTodo(todo.todo_id)}
+                >
+                  Delete
+                </button> */}
+              </td>
+            </tr>
           ))}
-        </ul>
-      );
-    }
-  }
+        </tbody>
+      </table>
+    </>
+  )
 }
+
+export default ListTodo

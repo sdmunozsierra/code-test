@@ -1,14 +1,14 @@
 import React from 'react'
-import MyComponent from './components/ListTodo'
+import ListTodo from './components/ListTodo'
 import InputTodo from './components/InputTodo'
 
 function App() {
   return (
     <div>
-      <MyComponent />
       <InputTodo />
+      <ListTodo />
     </div>
   )
 }
 
-export default App;
+export default App

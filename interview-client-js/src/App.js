@@ -1,17 +1,12 @@
-import React, {useEffect} from "react";
+import React from 'react'
+import MyComponent from './MyComponent'
 
-async function getTodos() {
-  return [];
+function App() {
+  return (
+    <div>
+      <MyComponent />
+    </div>
+  )
 }
-
-const App = () => {
-  useEffect(() => {
-    // @ts-ignore
-    getTodos().then(console.log);
-  }, []);
-
-
-  return null;
-};
 
 export default App;
